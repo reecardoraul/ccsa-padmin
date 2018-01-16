@@ -1,0 +1,202 @@
+<!--
+@license
+Copyright (c) 2018 Richard Rowell
+richard dot rowell АТ gmail dОТ СОМ
+ALL RIGHTS RESERVED
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/gold-phone-input/gold-phone-input.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="volunteer-edit">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+
+      paper-checkbox{
+        padding-left: 13px;
+      }
+    </style>
+
+    <div class="card">
+      <div class="circle" style="float:right;">V</div>
+      <h1>Volunteer Application</h1>
+      <!--
+      <vaadin-upload accept=".jpg" target="/upload">
+        <div class="drop-label">
+          <iron-icon icon="headshot"></iron-icon>
+          Please drop a headshot of yourself here
+        </div>
+      </vaadin-upload>
+      -->
+
+      <form is="iron-form" id="volunteer-edit" method="post" action="/api/volunteers" id="vapp">
+        <input type="hidden" name="vol_id" value="{{vol.id}}"></input>
+        <h2>Contact</h2>
+        <div class="horizontal layout">
+          <div class="flex">
+            <paper-input name="firstname" label="First Name" value="{{vol.firstname}}" required></paper-input>
+          </div>
+          <div class="flex">
+            <paper-input name="lastname" label="Last Name" value="{{vol.lastname}}" required></paper-input>
+          </div>
+        </div>
+        <vaadin-date-picker placeholder='Date of Birth' value="{{vol.birthdate}}"></vaadin-date-picker>
+        <gold-phone-input name="phone_primary" label="Primary Phone" value="{{vol.phone_primary}}" required></gold-phone-input>
+        <gold-phone-input name="phone_secondary" label="Secondary Phone" value="{{vol.phone_secondary}}"></gold-phone-input>
+        <paper-input type="email" name="email" label="Email" value="{{vol.email}}" required></paper-input>
+        <br>
+        <paper-input name="address" label="Address" value="{{vol.address}}" required></paper-input>
+        <paper-input name="city" label="City" value="{{vol.city}}"></paper-input>
+        <paper-input name="zip" label="Zip" value="{{vol.zip}}" required></paper-input>
+
+        <br>
+        <h2>Experience</h2>
+        <paper-input name="occupation" label="Occupation" value="{{vol.occupation}}"></paper-input>
+        <paper-input name="how_heard_of" label="How did the CCSA find you?" value="{{vol.how_heard_of}}"></paper-input>
+        <paper-input name="previous_years" type="number" label="How many years with CCSA?" value="{{vol.previous_years}}"></paper-input>
+        <paper-input name="notes" label="Experience with the disabled?" value="{{vol.notes}}"></paper-input>
+        <label>Comfortable taking a student on a chairlift?</label>
+        <paper-radio-group>
+          <paper-radio-button name="can_chair_yes" checked="{{vol.can_chair}}">Yes</paper-radio-button>
+          <paper-radio-button name="can_chair_no" checked="{{!vol.can_chair}}">No</paper-radio-button>
+        </paper-radio-group>
+        <br>
+        <label>Rate your ski skills</label>
+        <paper-radio-group id='prg-skilevel' selected={{vol.skilevel}}>
+          <paper-radio-button name="Non Skier">Non-skier</paper-radio-button>
+          <paper-radio-button name="Beginner">Beginner</paper-radio-button>
+          <paper-radio-button name="Intermediate">Intermediate</paper-radio-button>
+          <paper-radio-button name="Advanced">Advanced</paper-radio-button>
+          <paper-radio-button name="Expert">Expert</paper-radio-button>
+        </paper-radio-group>
+        <br>
+        <h2>Emergency Contact Information</h2>
+        <paper-input name="emer_contact" label="Emergency Contact" value="{{vol.emer_contact}}" required></paper-input>
+        <gold-phone-input name="emer_contact_primary_phone" label="Emergency Contact Phone"  value="{{vol.emer_contact_primary_phone}}" required></gold-phone-input>
+        <gold-phone-input name="emer_contact_secondar_phone" label="Emergency Contact Secondary Phone" value="{{vol.emer_contact_secondary_phone}}"></gold-phone-input>
+
+        <h2>Availability</h2>
+          <label>Would you be interested in working on any Committees?</label>
+          <br>
+          <paper-checkbox name="committee_equipment" checked="{{vol.committee_equipment}}">Equipment</paper-checkbox>
+          <paper-checkbox name="committee_fundraising" checked="{{vol.committee_fundraising}}">Fundraising</paper-checkbox>
+          <paper-checkbox name="committee_special_events"  checked="{{vol.committee_special_events}}">Special Events</paper-checkbox>
+          <paper-checkbox name="committee_training"  checked="{{vol.committee_training}}">Training</paper-checkbox>
+          <paper-checkbox name="committee_web"  checked="{{vol.committee_web}}">Website</paper-checkbox>
+          <paper-checkbox name="committee_public_relations"  checked="{{vol.committee_pr}}">Public Relations</paper-checkbox>
+          <paper-checkbox name="committee_board"  checked="{{vol.committee_board}}">Board Member</paper-checkbox>
+        <br>
+        <br>
+        <label>Please indicate all times you are available</label>
+        <br>
+          <paper-checkbox name="tuesday"  checked="{{vol.tuesday}}">Tuesday 6-8p</paper-checkbox>
+          <paper-checkbox name="wednesday" checked="{{vol.wednesday}}">Wednesday 6-8p</paper-checkbox>
+          <paper-checkbox name="thursday" checked="{{vol.thursday}}">Thursday 6-8p</paper-checkbox>
+          <paper-checkbox name="sunday1" checked="{{vol.sunday1}}">Sunday 1-3p</paper-checkbox>
+          <paper-checkbox name="sunday2" checked="{{vol.sunday2}}">Sunday 2-4p</paper-checkbox>
+          <paper-checkbox style="padding-left: 10px" name="sunday3"  checked="{{vol.sunday3}}">Sunday 3-5p</paper-checkbox>
+        <br>
+        <paper-input name="student_name" value="{{vol.student_name}}" label="Preffered Student?"></paper-input>
+
+        <label>Willing to teach multiple lessons?</label>
+        <paper-radio-group>
+          <paper-radio-button name="multi_yes" checked="{{vol.multiple_lessons}}">Yes</paper-radio-button>
+          <paper-radio-button name="multi_no" checked="{{!vol.multiple_lessons}}">No</paper-radio-button>
+        </paper-radio-group>
+        <br>
+        <label>Cannonsburg now charges CCSA for volunteer rental skis. This has added considerably to the program cost. Will you be able to furnish your own skis for lessons?</label>
+        <paper-radio-group>
+          <paper-radio-button name="no_rentals" checked="{{!vol.needs_rentals}}">Yes, I have skis</paper-radio-button>
+          <paper-radio-button name="rentals" checked="{{vol.needs_rentals}}">No, I need rentals</paper-radio-button>
+        </paper-radio-group>
+        <br>
+
+        <h2>Training Desired</h2>
+        <label>You do not need to decide if you are unsure or new to the program.</label>
+        <br>
+          <paper-checkbox name="training_sit" checked="{{vol.training_sit}}">Sit-Down - Bi Ski and Mono Ski</paper-checkbox>
+          <paper-checkbox name="training_stand" checked="{{vol.training_stand}}">Stand up - Developmentally Disabled / 3-4 Track / Sensory Impaired</paper-checkbox>
+        <br>
+
+        <h2>Membership</h2>
+        <label>All instructors are required to become members for insurance and liability reasons. Membership is $30.</label>
+        <label>Additional Donation</label>
+        <paper-radio-group id='prg_donation_amount' selected="{{vol.donation_amount}}">
+          <paper-radio-button name="0">None ($30)</paper-radio-button>
+          <paper-radio-button name="25">Donor ($55)</paper-radio-button>
+          <paper-radio-button name="50">Patron ($80)</paper-radio-button>
+          <paper-radio-button name="100">Benefactor ($130)</paper-radio-button>
+        </paper-radio-group>
+
+        <div>
+            <paper-button raised on-click="_submit">Submit</paper-button>
+        </div>
+        <div class="output"></div>
+
+ <iron-ajax
+       with-credentials="true"
+       id="vapp"
+       url="https://new.skiccsa.org/vapp?vol=[[jsonVol]]"
+       handle-as="json"
+       on-response="_handleResponse">
+     </iron-ajax>
+
+  </template>
+
+  <script>
+    class VolunteerEdit extends Polymer.Element {
+      static get is() { return 'volunteer-edit'; }
+
+      static get properties() {
+        return {
+            vol: {
+              type: Object,
+              value: function() { return {}; } 
+            },
+            jsonVol:{
+                type: String
+            }
+        };
+      }
+
+      getVolunteer(){
+          return vol;
+      }
+
+      _submit(event){
+        this.jsonVol = this._stringifyVol();
+        this.$.vapp.generateRequest();
+      }
+
+      _stringifyVol () {
+        return JSON.stringify(this.vol);
+      }
+
+      _handleResponse(event){
+          console.log("vapp returned");
+      }
+        
+    }
+
+    window.customElements.define(VolunteerEdit.is, VolunteerEdit);
+  </script>
+</dom-module>

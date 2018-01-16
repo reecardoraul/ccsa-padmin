@@ -1,0 +1,265 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../bower_components/iron-icons/hardware-icons.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../../bower_components/google-signin/google-signin.html">
+<link href='https://fonts.googleapis.com/css?family=Lobster+Two' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Merienda+One' rel='stylesheet' type='text/css'>
+<dom-module id="ccsa-login">
+  <template>
+      <style is="custom-style" include="shared-styles app-theme">
+      .container {
+        width: 100%;
+
+          @apply(--layout-center);
+      }
+      .logo {
+          color: #2b2b2b;
+          text-shadow: 3px 3px 0px rgba(0,0,0,0.1), 7px 7px 0px rgba(0,0,0,0.05);
+      }
+      paper-input {
+        --paper-input-error: {
+          color: var(--paper-red-500);
+          font-size: 12px;
+          font-weight: bold;
+        };
+        --paper-input-container-label: {
+          font-size: 14px;
+        };
+      }
+      paper-card {
+        @apply(--layout-vertical);
+        width: 360px;
+        margin: 0 calc(50% - 180px);
+        --paper-card: {
+          background: white;
+          padding: 0;
+          border-radius: 0 8px 8px 8px !important;
+        };
+        --paper-card-header: {
+          @apply(--layout-vertical);
+          @apply(--layout-center);
+          padding: 0 24px 24px 12px;
+          border-radius: 0 8px 0 0;
+        };
+        --paper-card-header-image: {
+          padding: 48px 12px 48px 12px;
+        };
+        --paper-card-header-text: {
+          //color: #676767;
+  text-shadow: 4px 4px 3px rgba(0,0,0,0.1); 
+font: 400 80px/1.2 'Merienda One', Helvetica, sans-serif;
+//font: 400 100px/1.2 'Leckerli One', Helvetica, sans-serif;
+
+//font: 400 100px/1.3 'Lobster Two', Helvetica, sans-serif;
+//font: 400 100px/1.3 'Oleo Script', Helvetica, sans-serif;
+           // font: 400 100px/1.3 'Berkshire Swash', Helvetica, sans-serif;
+          //font-size: 28px;
+          //font: 400 100px/1.5 'Pacifico', Helvetica, sans-serif;
+          //font-weight: 300;
+          padding-left: 12px;
+          padding-bottom: 5px;
+        };
+        --paper-card-content: {
+          background: white;
+          @apply(--layout-vertical);
+          @apply(--layout-center);
+          @apply(--layout-wrap);
+          padding-top: 30px;
+          padding-bottom: 30px;
+          font-weight: normal;
+          height: auto;
+        };
+        --paper-card-actions: {
+          background: white;
+          @apply(--layout-vertical);
+          @apply(--layout-center);
+          font-size: 70%;
+          border: none;
+          border-radius: 0 0 8px 8px;
+        };
+        padding: 0;
+      }
+      ::content .header.paper-card .title-text.over-image.paper-card {
+        width: 100%;
+        left: 12px;
+      };
+      paper-toast {
+        --paper-toast-background-color: var(--paper-red-600);
+      }
+
+      #loginCard {
+        padding: 0;
+      }
+
+      form {
+        padding: 0;
+        width: 90%;
+      }
+      .row {
+        padding-top: 10px;
+        margin-bottom: 0;
+      }
+      .login-row {
+        margin-top: 25px;
+      }
+      #error {
+        color: var(--paper-red-500);
+      }
+      paper-button {
+        margin-left: 0;
+        width: 100%;
+      }
+    </style>
+        <iron-ajax id="ajax"
+             url="http://backend.benderz.net/auth/ott"
+             content-type="application/x-www-form-urlencoded"
+             method="post"
+             last-response="{{currentUser}}"
+             last-error="{{lastError}}"
+             on-response="_responseHandler"
+             on-error="_errorHandler"></iron-ajax>
+
+    <div style="background:white" >
+
+          <img style="width:250px;height:250px;display: block;
+              margin-left: auto;
+                  margin-right: auto;" src="/images/benders.png">
+        <div class="card-content flex" id="loginCard">
+
+        <div  style="padding:5px" align="center">
+        <!--
+<google-signin client-id="501305142106-53n307bt75cmof834ms0qvcb35ad5p9f.apps.googleusercontent.com" scopes="email profile"></google-signin>
+<google-signin-aware google-signin-aware-success="{{onSignIn}}" client-id="501305142106-53n307bt75cmof834ms0qvcb35ad5p9f.apps.googleusercontent.com" scopes="email profile"></google-signin-aware>
+-->
+            </div>
+            <div style="padding:5px" align="center">
+                <facebook-login
+                    appID="502400196777099"
+                    logout-link graph-url="me?fields=name,email"
+                    button-size='large'
+                    scope="public_profile email"
+                    auto-api-call></facebook-login>
+
+            </div>
+            <!--
+            -->
+        <!--
+            <div class="login-row">
+              <paper-button
+                  on-tap="_submitForm"
+                  id="loginButton"
+                  class="flex">Login</paper-button>
+            </div>
+            -->
+            <div>&nbsp;</div>
+        </div>
+
+    </div>
+
+    <paper-toast id="toast" text="{{response}}" opened></paper-toast>
+</template>
+  <script>
+
+document.addEventListener("google-signin-success", function(e) {
+// Access the GAPI instance passed back from authorization
+          var xhr = new XMLHttpRequest();
+          xhr.withCredentials = true; // pass along cookies
+          var id = gapi.auth2.getAuthInstance()['currentUser'].get().Zi.id_token;
+          xhr.open('GET', 'http://backend.benderz.net/auth/google?email=fooo&identifier=' + id);
+          //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == XMLHttpRequest.DONE || xhr.readyState == 4) {
+                       document.querySelector("my-app").token='foo';
+                }
+            }
+          xhr.onload = function() {
+            console.log('backend auth/google response: ' + xhr.responseText);
+          };
+          xhr.send();
+          //xhr.send('identifier=' + e.id_token );
+        
+});
+
+document.addEventListener("facebook-signin-success", function(e) {
+    console.log("facebook-signin-success");
+    console.log(e);
+  var token = e.detail.response.authResponse.accessToken;
+  var id = e.detail.response.authResponse.userID;
+  var xhr = new XMLHttpRequest();
+          xhr.withCredentials = true; // pass along cookies
+          xhr.open('GET', 'http://backend.benderz.net/auth/facebook?username=foo=&identifier=' + token);
+          //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == XMLHttpRequest.DONE || xhr.readyState == 4) {
+                       document.querySelector("my-app").token='foo';
+                }
+            }
+          xhr.onload = function() {
+            console.log('backend auth/facebook response: ' + xhr.responseText);
+          };
+          xhr.send();
+
+});
+
+    class CCSALogin extends Polymer.Element {
+      static get is() { return 'ccsa-login'; }
+
+      static get properties() {
+        return {
+        };
+      }
+
+        connectedCallback() {
+            super.connectedCallback();
+        }
+
+        _capsLockDetect(e) {
+          var currError = this.$.passwordInput.errorMessage;
+
+          var charKeyCode = e.keyCode ? e.keyCode : e.which;
+          var shiftKey = e.shiftKey ? e.shiftKey : ((charKeyCode == 16) ? true : false);
+
+          if (((charKeyCode >= 65 && charKeyCode <= 90) && !shiftKey)
+              || ((charKeyCode >= 97 && charKeyCode <= 122) && shiftKey)) {
+            //this.error = 'Caps lock is on';
+            this.$.passwordInput.errorMessage = 'CAPS LOCK IS ON';
+            this.$.passwordInput.invalid = true;
+          }
+          else {
+            this.$.passwordInput.errorMessage = '';
+            this.$.passwordInput.invalid = false;
+          }
+        }
+
+        _handleInput(e) {
+          // enter key
+          if (e.keyCode === 13) {
+            this._submitForm();
+          }
+        }
+
+        _submitForm(e) {
+          // uses the iron-form validate built-in method to enable field validation
+          this.$.loginForm.validate();
+
+          // calls the sp-ajax-post element to call the API
+          if (this.$.loginForm.validate() === true) {
+            console.log(this.$.ajax);
+            this.$["ajax"].generateRequest(this.body);
+            /* TODO add this back in after adding spinner
+            var spinner = document.getElementById('spinner');
+            spinner.active = true;*/
+          }
+        }
+    }
+  </script>
+</dom-module>

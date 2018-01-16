@@ -1,0 +1,58 @@
+{
+  "name": "ccsa-padmin",
+  "description": "CCSA Admin",
+  "main": "index.html",
+  "authors": [
+    "Richard Rowell <richard.rowell@gmail.com>"
+  ],
+  "license": "BSD-3-Clause",
+  "keywords": [
+    "CCSA"
+  ],
+  "homepage": "skiccsa.org",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "accessibility-developer-tools": "^2.10.0",
+    "app-layout": "PolymerElements/app-layout#^2.0.0",
+    "app-route": "PolymerElements/app-route#^2.0.0",
+    "chai": "^3.2.0",
+    "async": "^1.5.0",
+    "core-a11y-keys": "Polymer/core-a11y-keys#master",
+    "core-animated-pages": "Polymer/core-animated-pages#master",
+    "core-focusable": "Polymer/core-focusable#master",
+    "core-icon": "Polymer/core-icon#master",
+    "core-overlay": "Polymer/core-overlay#master",
+    "gold-phone-input": "^2.0.3",
+    "iron-form": "^2.0.1",
+    "iron-pages": "PolymerElements/iron-pages#^2.0.0",
+    "lodash": "^3.7.0",
+    "mocha": "^3.1.2",
+    "paper-button": "^2.0.0",
+    "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.1",
+    "paper-dialog": "Polymer/paper-dialog#master",
+    "paper-dropdown-menu": "^2.0.1",
+    "paper-icon-button": "PolymerElements/paper-icon-button#^2.0.0",
+    "paper-input": "^2.0.5",
+    "paper-item": "^2.0.0",
+    "paper-radio-group": "^2.0.0",
+    "sinon-chai": "^2.7.0",
+    "sinonjs": "^1.14.1",
+    "stacky": "^1.3.0",
+    "test-fixture": "^3.0.0",
+    "vaadin-icons": "vaadin/vaadin-icons#^4.1.3",
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "paper-card": "PolymerElements/paper-card#^2.0.0",
+    "paper-toast": "PolymerElements/paper-toast#^2.0.0",
+    "iron-collapse": "PolymerElements/iron-collapse#^2.0.0",
+    "google-signin": "^2.0.0",
+    "iron-icons": "PolymerElements/iron-icons#^2.0.1",
+    "vaadin-date-picker": "^2.0.7"
+  }
+}
