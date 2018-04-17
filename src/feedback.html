@@ -1,0 +1,110 @@
+<!--
+@license
+Copyright (c) 2018 Richard Rowell
+richard dot rowell АТ gmail dОТ СОМ
+ALL RIGHTS RESERVED
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/gold-phone-input/gold-phone-input.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="feedback">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+
+      paper-checkbox{
+        padding-left: 13px;
+      }
+    </style>
+
+    <div class="card">
+      <div class="circle" style="float:right;"></div>
+      <h1>Feedback</h1>
+      <!--
+      <vaadin-upload accept=".jpg" target="/upload">
+        <div class="drop-label">
+          <iron-icon icon="headshot"></iron-icon>
+          Please drop a headshot of yourself here
+        </div>
+      </vaadin-upload>
+      -->
+
+      <form is="iron-form" id="feedback" method="post" action="/feedback">
+        <h2>Contact Us!</h2>
+        <div class="horizontal layout">
+          <div class="flex">
+            <paper-input name="name" label="Your Name" value="{{name}}" required></paper-input>
+          </div>
+        </div>
+        How can we contact you?
+        <gold-phone-input name="phone" label="Phone" value="{{phone}}"></gold-phone-input>
+        <paper-input type="email" name="email" label="Email" value="{{email}}"></paper-input>
+        <br>
+        <paper-input name="feedback" label="We'd love to hear from you" value="{{feedback}}" required></paper-input>
+<!-- what is number + number ? -->
+        <paper-input name="human" label="two plus four is" value="{{num}}" required></paper-input>
+        <div>
+            <paper-button raised on-click="_submit">Send Feedback</paper-button>
+        </div>
+
+ <iron-ajax
+       with-credentials="true"
+       id="ajax"
+       url="https://new.skiccsa.org/feedback"
+       handle-as="json"
+       on-response="_handleResponse">
+     </iron-ajax>
+
+  </template>
+
+  <script>
+    class Feedback extends Polymer.Element {
+      static get is() { return 'feedback'; }
+
+      static get properties() {
+        return {
+            name: String,
+            phone: String,
+            email: String,
+            num: String        
+        };
+      }
+
+      _submit(event){
+        this.jsonVol = this._stringifyFeedback();
+        this.$.vapp.generateRequest();
+      }
+
+      _stringifyFeedback(){
+          let feedback = { "name": this.name, "phone": this.phone, "email": this.email, "num": this.num };
+          this.$.ajax.
+      }
+
+      _handleResponse(event){
+          console.log("vapp returned");
+      }
+        
+    }
+
+    window.customElements.define(VolunteerEdit.is, VolunteerEdit);
+  </script>
+</dom-module>

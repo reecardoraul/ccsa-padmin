@@ -1,0 +1,49 @@
+
+<!--
+@license
+Copyright (c) 2018 Richard Rowell
+richard dot rowell АТ gmail dОТ СОМ
+ALL RIGHTS RESERVED
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="v-app">
+      <!-- Optional shadow DOM template -->
+      <template>
+        <style>
+          /* CSS rules for your element */
+        </style>
+
+        <!-- shadow DOM for your element -->
+
+        <div>{{greeting}}</div> <!-- data bindings in local DOM -->
+      </template>
+
+      <script>
+        // Define the element's API using an ES2015 class
+        class XCustom extends Polymer.Element {
+
+          static get is() { return 'v-app'; }
+
+          // Declare properties for the element's public API
+          static get properties() {
+            return {
+              greeting: {
+                type: String,
+                value: "Hello!"
+              }
+            }
+          }
+
+          // Add methods to the element's public API
+          greetMe() {
+            console.log(this.greeting);
+          }
+
+        }
+
+        // Register the x-custom element with the browser
+        customElements.define(VApp.is, VApp);
+      </script>
+</dom-module>

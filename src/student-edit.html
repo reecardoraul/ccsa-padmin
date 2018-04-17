@@ -1,0 +1,296 @@
+<!--
+@license
+Copyright (c) 2018 Richard Rowell
+richard dot rowell АТ gmail dОТ СОМ
+ALL RIGHTS RESERVED
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/gold-phone-input/gold-phone-input.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
+<link rel="import" href="../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="student-edit">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+
+      paper-checkbox{
+        padding-left: 13px;
+      }
+    </style>
+
+   <iron-ajax
+     with-credentials="true"
+     id="sapp"
+     url="https://new.skiccsa.org/sapp?student=[[jsonStudent]]"
+     handle-as="json"
+     on-response="_handleResponse">
+   </iron-ajax>
+
+
+
+    <div class="card">
+      <div class="circle" style="float:right;">V</div>
+      <h1>Student Application</h1>
+      <!--
+      <vaadin-upload accept=".jpg" target="/upload">
+        <div class="drop-label">
+          <iron-icon icon="headshot"></iron-icon>
+          Please drop a headshot of yourself here
+        </div>
+      </vaadin-upload>
+      -->
+
+      <form is="iron-form" id="studenter-edit" >
+        <input type="hidden" name="student_id" value="{{student.id}}"></input>
+        <h3>Contact</h3>
+        <div class="horizontal layout">
+          <div class="flex">
+            <paper-input name="firstname" label="First Name" value="{{student.firstname}}" required></paper-input>
+          </div>
+          <div class="flex">
+            <paper-input name="lastname" label="Last Name" value="{{student.lastname}}" required></paper-input>
+          </div>
+        </div>
+        <vaadin-date-picker placeholder='Date of Birth' value="{{student.birthdate}}"></vaadin-date-picker>
+            <paper-input name="height" label="Height" value="{{student.height}}"></paper-input>
+            <paper-input name="weight" type="number" label="Weight in pounds" value="{{student.weight}}"></paper-input>
+            <paper-input name="shoe_size" label="Shoe Size" value="{{student.shoe_size}}"></paper-input>
+ 
+        <gold-phone-input name="phone_primary" label="Primary Phone" value="{{student.phone_primary}}" required></gold-phone-input>
+        <gold-phone-input name="phone_secondary" label="Secondary Phone" value="{{student.phone_secondary}}"></gold-phone-input>
+        <paper-input type="email" name="email" label="Email" value="{{student.email}}" required></paper-input>
+        <br>
+        <paper-input name="address" label="Address" value="{{student.address}}" required></paper-input>
+        <paper-input name="city" label="City" value="{{student.city}}"></paper-input>
+        <paper-input name="state" label="state" value="{{student.state}}"></paper-input>
+        <paper-input name="zip" label="Zip" value="{{student.zip}}" required></paper-input>
+        <paper-input name="guardian" label="Parent/Guardian" value="{{student.guardian}}" required></paper-input>
+        <paper-input name="how_heard_of" label="How did you hear about CCSA?" value="{{student.how_heard_of}}" required></paper-input>
+
+        <h3>Emergency Contact Information</h3>
+        <paper-input name="emer_contact" label="Emergency Contact" value="{{student.emer_contact}}" required></paper-input>
+        <gold-phone-input name="emer_contact_primary_phone" label="Emergency Contact Phone"  value="{{student.emer_contact_primary_phone}}" required></gold-phone-input>
+        <gold-phone-input name="emer_contact_secondary_phone" label="Emergency Contact Secondary Phone" value="{{student.emer_contact_secondary_phone}}"></gold-phone-input>
+        <h3>Program Preferences</h3>
+        <label>Please indicate preferred time slots</label><br>
+        <vaadin-combo-box id='pref1' label='1st Preference' items='[[timeslots]]'></vaadin-combo-box>
+        <vaadin-combo-box id='pref2' label='2nd Preference' items='[[timeslots]]'></vaadin-combo-box>
+        <vaadin-combo-box id='pref3' label='3rd Preference' items='[[timeslots]]'></vaadin-combo-box>
+        <br>
+        <paper-input name="volunteer_name" label="Preferred Volunteer" value="{{student.volunteer_name}}"></paper-input>
+
+        <label>Rental skis needed? (Do not check if using a sit ski, mono or bi)</label>
+            <paper-checkbox name="needs_rentals" checked="{{student.needs_rentals}}">Need Rental Skis</paper-checkbox>
+        <br>
+
+        <h3>Disability</h3>
+          <label>Please check all that apply</label><br>
+            <paper-checkbox name="dis_dd" checked="{{student.dis_dd}}">Developmental</paper-checkbox>
+            <paper-checkbox name="dis_vi" checked="{{student.dis_vi}}">Visually Impairement</paper-checkbox>
+            <paper-checkbox name="dis_hi" checked="{{student.dis_hi}}">Hearing Impairement</paper-checkbox>
+            <paper-checkbox name="dis_oi" checked="{{student.dis_oi}}">Orthopedic Impairment</paper-checkbox>
+            <paper-checkbox name="dis_sci" checked="{{student.dis_sci}}">Spinal Cord Injury</paper-checkbox>
+            <paper-checkbox name="dis_cp" checked="{{student.dis_cp}}">Cereberal Palsy</paper-checkbox>
+            <paper-checkbox name="dis_tbi" checked="{{student.dis_tbi}}">Traumatic Brain Injury</paper-checkbox>
+            <paper-checkbox name="dis_amp" checked="{{student.dis_amp}}">Amputee</paper-checkbox>
+            <paper-checkbox name="dis_stroke" checked="{{student.dis_stroke}}">Stroke</paper-checkbox>
+            <paper-input name="dis_other" label="Other Disability" value="{{student.dis_other}}"></paper-input>
+          <br>
+          <label>What Adaptive Discipline? Leave blank if unsure</label><br>
+            <paper-checkbox name="ad_bvi" checked="{{student.ad_bvi}}">Visual Impaired</paper-checkbox>
+            <paper-checkbox name="ad_hi" checked="{{student.ad_hi}}">Hearing Impaired</paper-checkbox>
+            <paper-checkbox name="ad_2t" checked="{{student.ad_2t}}">2 Track</paper-checkbox>
+            <paper-checkbox name="ad_3t" checked="{{student.ad_3t}}">3 Track</paper-checkbox>
+            <paper-checkbox name="ad_4t" checked="{{student.ad_4t}}">4 Track</paper-checkbox>
+            <paper-checkbox name="ad_aa" checked="{{student.ad_aa}}">Arm Amputee</paper-checkbox>
+            <paper-checkbox name="ad_dd" checked="{{student.ad_dd}}">Developmental</paper-checkbox>
+            <paper-checkbox name="ad_mono" checked="{{student.ad_mono}}">Monoski</paper-checkbox>
+            <paper-checkbox name="ad_bi" checked="{{student.ad_bi}}">Bi-ski</paper-checkbox>
+        <br>
+        <paper-input label="Is skier is under doctor's care for any condition?" value="{{student.doctor_descrip}}"></paper-input>
+        <paper-input label="Any limitations on skier's activities?" value="{{student.limitation}}"></paper-input>
+        <paper-input label="Please describe any medical precautions" value="{{student.precaution}}"></paper-input>
+        <paper-input label="Allergies" value="{{student.allergies}}"></paper-input>
+        <label>Check all that apply</label><br>
+        <paper-checkbox checked="{{student.hepb}}">HEPATITIES B or C carrier?</paper-checkbox><br>
+        <paper-checkbox checked="{{student.downs}}">Down's Syndrome?</paper-checkbox><br>
+        <paper-checkbox checked="{{student.assist_eat}}">Needs assistance eating?</paper-checkbox><br>
+        <template is="dom-if" if="[[student.downs]]">
+            <label>
+            If skier has Down's Syndrome, verification of atlantoaxial dislocation is needed.  A doctor's signature is required.
+            </label>
+        </template>
+            <br>
+        <paper-input label="Special Diet?" value="{{student.special_diet}}"></paper-input>
+        <paper-input label="Needs Bathroom Assistance?" value="{{student.assist_bathroom}}"></paper-input>
+        <paper-input label="Behavioural Issues CCSA should know of?" value="{{student.behaviour_descrip}}"></paper-input>
+
+        <h3>Sit-Down Skiers</h3>
+
+        <label>Will rolling sideways onto the shoulders cause dizziness or pain or injury?</label>
+        <paper-radio-group>
+          <paper-radio-button checked="{{student.sit_roll}}">Yes</paper-radio-button>
+          <paper-radio-button checked="{{!student.sit_roll}}">No</paper-radio-button>
+        </paper-radio-group>
+        <br>
+        <label>Can push wheelchair independently?</label>
+        <paper-radio-group>
+          <paper-radio-button checked="{{student.sit_arms}}">Yes</paper-radio-button>
+          <paper-radio-button checked="{{!student.sit_arms}}">No</paper-radio-button>
+        </paper-radio-group>
+        <br>
+        <label>Any injury or surgery to back, spinal cord, or hips in past six months?</label>
+        <paper-radio-group>
+          <paper-radio-button checked="{{student.sit_injury}}">Yes</paper-radio-button>
+          <paper-radio-button checked="{{!student.sit_injury}}">No</paper-radio-button>
+        </paper-radio-group>
+        <br>
+        <label>Does the skier wear a back brace?</label>
+        <paper-radio-group>
+          <paper-radio-button checked="{{student.sit_brace}}">Yes</paper-radio-button>
+          <paper-radio-button checked="{{!student.sit_brace}}">No</paper-radio-button>
+        </paper-radio-group>
+        <br>
+        <template is="dom-if" if="[[student.sit_brace]]">
+          <paper-input label="Describe Brace" value="{{student.sit_brace_descrip}}"></paper-input>
+        </template>
+        <br>
+        <label>Does the skier have Harrington Rods?</label>
+        <paper-radio-group>
+          <paper-radio-button checked="{{student.sit_rods}}">Yes</paper-radio-button>
+          <paper-radio-button checked="{{!student.sit_rods}}">No</paper-radio-button>
+        </paper-radio-group>
+        <br>
+        <template is="dom-if" if="[[student.sit_rods]]">
+          <paper-input label="How Long has skier had rods?" value="{{student.sit_rods_length}}"></paper-input>
+        </template>
+        <br>
+
+        <label>Would you be interested in working on any Committees?</label>
+          <br>
+          <paper-checkbox name="committee_equipment" checked="{{vol.committee_equipment}}">Equipment</paper-checkbox>
+          <paper-checkbox name="committee_fundraising" checked="{{vol.committee_fundraising}}">Fundraising</paper-checkbox>
+          <paper-checkbox name="committee_special_events"  checked="{{vol.committee_special_events}}">Special Events</paper-checkbox>
+          <paper-checkbox name="committee_training"  checked="{{vol.committee_training}}">Training</paper-checkbox>
+          <paper-checkbox name="committee_web"  checked="{{vol.committee_web}}">Website</paper-checkbox>
+          <paper-checkbox name="committee_public_relations"  checked="{{vol.committee_pr}}">Public Relations</paper-checkbox>
+          <paper-checkbox name="committee_board"  checked="{{vol.committee_board}}">Board Member</paper-checkbox>
+ 
+        <div>
+            <paper-button raised on-click="_submit">Save</paper-button>
+        </div>
+
+  </template>
+
+  <script>
+    class StudentEdit extends Polymer.Element {
+      static get is() { return 'student-edit'; }
+
+      static get properties() {
+        return {
+            student: {
+              type: Object,
+              value: function() { return {}; } 
+            },
+            timeslots: { 
+              type: Array,
+              value: function() { 
+                return [
+                    {'label':'Tuesday 6-8p', 'value':'tuesday' },
+                    {'label':'Wednesday 6-8p', 'value':'wednesday' },
+                    {'label':'Thursday 6-8p', 'value':'thursday' },
+                    {'label':'Sunday 1-3p', 'value':'sunday1' },
+                    {'label':'Sunday 2-4p', 'value':'sunday2' },
+                    {'label':'Sunday 3-5p', 'value':'sunday3' }
+                ];
+              }
+            },
+            jsonStudent:{
+                type: String
+            }
+        };
+      }
+
+      getStudent(){
+          return student;
+      }
+
+      _setPrefs(e){
+        if( this.student ){
+            let foo = this;
+            this.timeslots.forEach( function(item) {
+                let val = foo.student[item.value];
+                if( val ){
+                    let pref = foo.shadowRoot.querySelector('#pref' + val);
+                    pref.set('value', item.value);
+                }
+            });
+        }else{
+            if( this.$ ){
+                this.$.pref1.set('value','');
+                this.$.pref2.set('value','');
+                this.$.pref3.set('value','');
+            }
+        }
+      }
+
+      _computePrefs(){
+        student.teusday = null;
+        student.wednsday = null;
+        student.thursday = null;
+        student.sunday1 = null;
+        student.sunday2 = null;
+        student.sunday3 = null;
+
+        for( let i = 1; i < 4; i++ ){
+            let pref = this.$$('pref' + i);
+            if( pref.item ){
+                this.set('student.' + pref.item, i);
+            }
+        }
+      }
+
+      _submit(event){
+        this._computePrefs();
+        this.jsonStudent = this._stringifyStudent();
+        this.$.sapp.generateRequest();
+      }
+
+      _stringifyStudent () {
+        return JSON.stringify(this.student);
+      }
+
+      _handleResponse(event){
+          console.log("sapp returned");
+      }
+
+      setStudent( e ){
+        this.set('student',  e);
+        this._setPrefs(e);
+      }
+        
+    }
+
+    window.customElements.define(StudentEdit.is, StudentEdit);
+  </script>
+</dom-module>
+

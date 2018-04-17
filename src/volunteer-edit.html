@@ -50,7 +50,7 @@ ALL RIGHTS RESERVED
 
       <form is="iron-form" id="volunteer-edit" method="post" action="/api/volunteers" id="vapp">
         <input type="hidden" name="vol_id" value="{{vol.id}}"></input>
-        <h2>Contact</h2>
+        <h3>Contact</h3>
         <div class="horizontal layout">
           <div class="flex">
             <paper-input name="firstname" label="First Name" value="{{vol.firstname}}" required></paper-input>
@@ -69,7 +69,7 @@ ALL RIGHTS RESERVED
         <paper-input name="zip" label="Zip" value="{{vol.zip}}" required></paper-input>
 
         <br>
-        <h2>Experience</h2>
+        <h3>Experience</h3>
         <paper-input name="occupation" label="Occupation" value="{{vol.occupation}}"></paper-input>
         <paper-input name="how_heard_of" label="How did the CCSA find you?" value="{{vol.how_heard_of}}"></paper-input>
         <paper-input name="previous_years" type="number" label="How many years with CCSA?" value="{{vol.previous_years}}"></paper-input>
@@ -89,12 +89,12 @@ ALL RIGHTS RESERVED
           <paper-radio-button name="Expert">Expert</paper-radio-button>
         </paper-radio-group>
         <br>
-        <h2>Emergency Contact Information</h2>
+        <h3>Emergency Contact Information</h3>
         <paper-input name="emer_contact" label="Emergency Contact" value="{{vol.emer_contact}}" required></paper-input>
         <gold-phone-input name="emer_contact_primary_phone" label="Emergency Contact Phone"  value="{{vol.emer_contact_primary_phone}}" required></gold-phone-input>
         <gold-phone-input name="emer_contact_secondar_phone" label="Emergency Contact Secondary Phone" value="{{vol.emer_contact_secondary_phone}}"></gold-phone-input>
 
-        <h2>Availability</h2>
+        <h3>Availability</h3>
           <label>Would you be interested in working on any Committees?</label>
           <br>
           <paper-checkbox name="committee_equipment" checked="{{vol.committee_equipment}}">Equipment</paper-checkbox>
@@ -130,14 +130,14 @@ ALL RIGHTS RESERVED
         </paper-radio-group>
         <br>
 
-        <h2>Training Desired</h2>
+        <h3>Training Desired</h3>
         <label>You do not need to decide if you are unsure or new to the program.</label>
         <br>
           <paper-checkbox name="training_sit" checked="{{vol.training_sit}}">Sit-Down - Bi Ski and Mono Ski</paper-checkbox>
           <paper-checkbox name="training_stand" checked="{{vol.training_stand}}">Stand up - Developmentally Disabled / 3-4 Track / Sensory Impaired</paper-checkbox>
         <br>
 
-        <h2>Membership</h2>
+        <h3>Membership</h3>
         <label>All instructors are required to become members for insurance and liability reasons. Membership is $30.</label>
         <label>Additional Donation</label>
         <paper-radio-group id='prg_donation_amount' selected="{{vol.donation_amount}}">
@@ -148,7 +148,7 @@ ALL RIGHTS RESERVED
         </paper-radio-group>
 
         <div>
-            <paper-button raised on-click="_submit">Submit</paper-button>
+            <paper-button raised on-click="_submit">Save</paper-button>
         </div>
         <div class="output"></div>
 
@@ -193,6 +193,10 @@ ALL RIGHTS RESERVED
 
       _handleResponse(event){
           console.log("vapp returned");
+      }
+
+      setVol( e ){
+        this.set('vol',  e);
       }
         
     }

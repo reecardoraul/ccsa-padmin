@@ -1,7 +1,7 @@
 {
-  "name": "My App",
-  "short_name": "My App",
-  "description": "My App description",
+  "name": "CCSA Admin",
+  "short_name": "CCSA Admin",
+  "description": "CCSA Volunteer Application",
   "icons": [
     {
       "src": "images/manifest/icon-192x192.png",

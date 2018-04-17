@@ -25,7 +25,7 @@ ALL RIGHTS RESERVED
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="volunteer-list">
+<dom-module id="feedback-list">
   <template>
     <style include="shared-styles">
       :host {
@@ -51,20 +51,20 @@ ALL RIGHTS RESERVED
      <iron-ajax
         auto
        with-credentials="true"
-       id="getVols"
-       url="https://new.skiccsa.org/volunteers"
-       last-response="{{vols}}"
+       id="getfeedback"
+       url="https://new.skiccsa.org/feedback"
+       last-response="{{feedback}}"
        on-response="_handleResponse"
        ></iron-ajax>
 
 
     <div class="card">
       <div class="circle" style="float:right;">V</div>
-      <h1>Volunteers</h1>
+      <h1>Feedback</h1>
 
       <paper-input name="filter" label="Search" value="{{filter}}" on-value-changed="_filterChanged"></paper-input>
 
-      <vaadin-grid id="grid" aria-label="Volunteer Applications" items="[[vols]]" active-item="{{activeItem}}">
+      <vaadin-grid id="grid" aria-label="feedback Applications" items="[[feedbacks]]" active-item="{{activeItem}}">
 
           <vaadin-grid-column flex-grow="1">
             <template class="header">
@@ -75,13 +75,13 @@ ALL RIGHTS RESERVED
 
           <vaadin-grid-column width="9em" flex-grow="0">
             <template class="header">
-              <vaadin-grid-sorter path="phone_primary">Phone</vaadin-grid-sorter>
+              <vaadin-grid-sorter path="phone">Phone</vaadin-grid-sorter>
             </template>
             <template>[[item.phone_primary]]</template>
           </vaadin-grid-column>
          <vaadin-grid-column flex-grow="0">
             <template class="header">
-              <vaadin-grid-sorter path="age">Age</vaadin-grid-sorter>
+              <vaadin-grid-sorter path="feedback">Feedback</vaadin-grid-sorter>
             </template>
             <template>[[item.age]]</template>
           </vaadin-grid-column>
@@ -91,13 +91,13 @@ ALL RIGHTS RESERVED
 
   </template>
     <script>
-    class VolunteerList extends Polymer.Element {
-      static get is() { return 'volunteer-list'; }
+    class FeedbackList extends Polymer.Element {
+      static get is() { return 'feedback-list'; }
 
       static get properties() {
         return {
           filter: { type: String },
-          vols: { type: Array },
+          feedback: { type: Array },
           plen: { type: Number },
           activeItem: {
             observer: '_activeItemChanged'
@@ -105,27 +105,26 @@ ALL RIGHTS RESERVED
         };
       }
 
-      _editVol(e){
-          console.log('editVol(' + e + ')');
+      _editfeedback(e){
+          console.log('editfeedback(' + e + ')');
       }
 
       _handleResponse(e){
           console.log(e);
           if( e  && e.detail && e.detail.response && e.detail.response.status == "success" ){
-              this.set('vols', e.detail.response.data);//shouldn't be needed, data binding is not working!
+              this.set('feedback', e.detail.response.data);//shouldn't be needed, data binding is not working!
           }
       }
 
       _filterChanged( e ){
-          let threshold = 1; //how many to ignore before searching
           if( e && e.detail && e.detail.value ){
-            if( e.detail.value.length > threshold  ){
-                this.$.getVols.params= { 'filter' : e.detail.value };
-                this.$.getVols.generateRequest();
+            if( e.detail.value.length > 2  ){
+                this.$.getFeedback.params= { 'filter' : e.detail.value };
+                this.$.getFeedback.generateRequest();
             }else{
-                if( this.plen > threshold ){
-                    this.$.getVols.params= { 'filter' : '' };
-                    this.$.getVols.generateRequest();
+                if( this.plen > 2 ){
+                    this.$.getFeedback.params= { 'filter' : '' };
+                    this.$.getFeedback.generateRequest();
                 }
             }
 
@@ -138,18 +137,12 @@ ALL RIGHTS RESERVED
       }
 
       _activeItemChanged(item) {
-          if( item )
-        this.dispatchEvent(new CustomEvent('vol-selected', {detail: item}));
-      }
-
-      clearSelected(){
-          this.$.grid.activeItem = null;
+          if( item ) 
+              this.dispatchEvent(new CustomEvent('feedback-selected', {detail: item}));
       }
     }
 
-    window.customElements.define(VolunteerList.is, VolunteerList);
+    window.customElements.define(FeedbackList.is, FeedbackList);
   </script>
 
 </dom-module>
-
-

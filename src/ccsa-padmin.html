@@ -20,7 +20,10 @@ ALL RIGHTS RESERVED
 <link rel="import" href="my-icons.html">
 
 <link rel="import" href="ccsa-login.html">
+<link rel="import" href="volunteer-list.html">
+<link rel="import" href="student-list.html">
 <link rel="import" href="volunteer-edit.html">
+<link rel="import" href="student-edit.html">
 <link rel="lazy-import" href="my-view2.html">
 <link rel="lazy-import" href="my-view3.html">
 <link rel="lazy-import" href="my-view404.html">
@@ -94,10 +97,10 @@ ALL RIGHTS RESERVED
           <!-- Drawer content -->
           <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
             <app-toolbar>Menu</app-toolbar>
-            <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-              <a name="view1" href="[[rootPath]]view1">Volunteers</a>
-              <a name="view2" href="[[rootPath]]view2">Students</a>
-              <a name="view3" href="[[rootPath]]view3">Matching</a>
+            <iron-selector id="menu_selector" selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+              <a name="volunteers" href="[[rootPath]]volunteers" on-click="_menuClicked">Volunteers</a>
+              <a name="students" href="[[rootPath]]students" on-click="_menuClicked">Students</a>
+              <a name="matching" href="[[rootPath]]matching" on-click="_menuClicked">Matching</a>
             </iron-selector>
           </app-drawer>
 
@@ -116,10 +119,12 @@ ALL RIGHTS RESERVED
                 attr-for-selected="name"
                 fallback-selection="view404"
                 role="main">
-              <volunteer-edit name="view1"></volunteer-edit>
-              <my-view2 name="view2"></my-view2>
-              <my-view3 name="view3"></my-view3>
+              <volunteer-list name="volunteers" on-vol-selected="_volEdit"></volunteer-list>
+              <student-list name="students" on-student-selected="_studentEdit"></student-list>
+              <my-view3 name="matching"></my-view3>
               <my-view404 name="view404"></my-view404>
+              <volunteer-edit id='vedit' name="vol-edit"></volunteer-edit>  
+              <student-edit id='sedit' name="student-edit"></student-edit>  
             </iron-pages>
           </app-header-layout>
         </app-drawer-layout>
@@ -157,6 +162,14 @@ ALL RIGHTS RESERVED
         ];
       }
 
+      _menuClicked(e){
+          console.log(e);
+          if( this.$.menu_selector.selectedItems.length ){
+              this.set('page',this.$.menu_selector.selectedItems[0].name);
+          }
+          return true;
+      }
+
       handleResponse(data) {
         if( data && data.detail && data.detail.response && data.detail.response.nickname ){
             user = data.detail.response.nickname;
@@ -183,14 +196,11 @@ ALL RIGHTS RESERVED
       }
 
       _routePageChanged(page) {
+        console.log(page);
         // If no page was found in the route data, page will be an empty string.
-        // Default to 'view1' in that case.
-        this.page = page || 'view1';
+        this.page = page || 'volunteers';
 
         // Close a non-persistent drawer when the page & route are changed.
-        if (!this.$.drawer.persistent) {
-          this.$.drawer.close();
-        }
       }
 
       _pageChanged(page) {
@@ -203,10 +213,25 @@ ALL RIGHTS RESERVED
             this._showPage404.bind(this),
             true);
         */
+        if (!this.$.drawer.persistent) {
+          this.$.drawer.close();
+        }
       }
 
       _showPage404() {
         this.page = 'view404';
+      }
+
+      _volEdit( e ) {
+        console.log(e);
+        this.$.vedit.setVol( e.detail );
+        this.page = 'vol-edit';
+      }
+
+      _studentEdit( e ) {
+        console.log(e);
+        this.$.sedit.setStudent( e.detail );
+        this.page = 'student-edit';
       }
     }
 

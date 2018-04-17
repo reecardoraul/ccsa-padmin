@@ -25,7 +25,7 @@ ALL RIGHTS RESERVED
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="volunteer-list">
+<dom-module id="student-list">
   <template>
     <style include="shared-styles">
       :host {
@@ -51,20 +51,20 @@ ALL RIGHTS RESERVED
      <iron-ajax
         auto
        with-credentials="true"
-       id="getVols"
-       url="https://new.skiccsa.org/volunteers"
-       last-response="{{vols}}"
+       id="getStudents"
+       url="https://new.skiccsa.org/students"
+       last-response="{{students}}"
        on-response="_handleResponse"
        ></iron-ajax>
 
 
     <div class="card">
       <div class="circle" style="float:right;">V</div>
-      <h1>Volunteers</h1>
+      <h1>Student Applications</h1>
 
       <paper-input name="filter" label="Search" value="{{filter}}" on-value-changed="_filterChanged"></paper-input>
 
-      <vaadin-grid id="grid" aria-label="Volunteer Applications" items="[[vols]]" active-item="{{activeItem}}">
+      <vaadin-grid id="grid" aria-label="Student Applications" items="[[students]]" active-item="{{activeItem}}">
 
           <vaadin-grid-column flex-grow="1">
             <template class="header">
@@ -91,13 +91,13 @@ ALL RIGHTS RESERVED
 
   </template>
     <script>
-    class VolunteerList extends Polymer.Element {
-      static get is() { return 'volunteer-list'; }
+    class StudentList extends Polymer.Element {
+      static get is() { return 'student-list'; }
 
       static get properties() {
         return {
           filter: { type: String },
-          vols: { type: Array },
+          students: { type: Array },
           plen: { type: Number },
           activeItem: {
             observer: '_activeItemChanged'
@@ -105,27 +105,26 @@ ALL RIGHTS RESERVED
         };
       }
 
-      _editVol(e){
-          console.log('editVol(' + e + ')');
+      _editStudent(e){
+          console.log('editStudent(' + e + ')');
       }
 
       _handleResponse(e){
           console.log(e);
           if( e  && e.detail && e.detail.response && e.detail.response.status == "success" ){
-              this.set('vols', e.detail.response.data);//shouldn't be needed, data binding is not working!
+              this.set('students', e.detail.response.data);//shouldn't be needed, data binding is not working!
           }
       }
 
       _filterChanged( e ){
-          let threshold = 1; //how many to ignore before searching
           if( e && e.detail && e.detail.value ){
-            if( e.detail.value.length > threshold  ){
-                this.$.getVols.params= { 'filter' : e.detail.value };
-                this.$.getVols.generateRequest();
+            if( e.detail.value.length > 2  ){
+                this.$.getStudents.params= { 'filter' : e.detail.value };
+                this.$.getStudents.generateRequest();
             }else{
-                if( this.plen > threshold ){
-                    this.$.getVols.params= { 'filter' : '' };
-                    this.$.getVols.generateRequest();
+                if( this.plen > 2 ){
+                    this.$.getStudents.params= { 'filter' : '' };
+                    this.$.getStudents.generateRequest();
                 }
             }
 
@@ -138,18 +137,15 @@ ALL RIGHTS RESERVED
       }
 
       _activeItemChanged(item) {
-          if( item )
-        this.dispatchEvent(new CustomEvent('vol-selected', {detail: item}));
-      }
-
-      clearSelected(){
-          this.$.grid.activeItem = null;
+          if( item ) 
+              this.dispatchEvent(new CustomEvent('student-selected', {detail: item}));
       }
     }
 
-    window.customElements.define(VolunteerList.is, VolunteerList);
+    window.customElements.define(StudentList.is, StudentList);
   </script>
 
 </dom-module>
+
 
 
